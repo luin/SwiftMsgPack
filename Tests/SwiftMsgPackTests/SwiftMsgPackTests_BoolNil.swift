@@ -49,12 +49,14 @@ class SwiftMsgPackTests_BoolNil: XCTestCase {
 	
 	/// Test boolean `true` value
 	func testBoolean_true() {
-		performBooleanTest(name: "Test True", value: true, expected: UInt8(0xc3))
+    performBooleanTest(name: "Test True", value: true, expected: UInt8(0xc3))
+    performBooleanTest(name: "Test True", value: NSNumber(booleanLiteral: true), expected: UInt8(0xc3))
 	}
 	
 	/// Test boolean `false` value
 	func testBoolean_false() {
-		performBooleanTest(name: "Test False", value: false, expected: UInt8(0xc2))
+    performBooleanTest(name: "Test False", value: false, expected: UInt8(0xc2))
+    performBooleanTest(name: "Test False", value: NSNumber(booleanLiteral: false), expected: UInt8(0xc2))
 	}
 	
 	// MARK: - Test `nil` value type
@@ -93,7 +95,7 @@ class SwiftMsgPackTests_BoolNil: XCTestCase {
 		}
 	}
 	
-	func performBooleanTest(name testName: String, value: Bool, expected byte: UInt8) {
+	func performBooleanTest(name testName: String, value: Any, expected byte: UInt8) {
 		var packed = Data()
 		do {
 			// Pack data
@@ -119,7 +121,7 @@ class SwiftMsgPackTests_BoolNil: XCTestCase {
 				return
 			}
 			
-			guard bool_val == value else {
+			guard bool_val == value as? Bool else {
 				XCTFail("[\(testName)] Packed boolean value is not valid")
 				return
 			}

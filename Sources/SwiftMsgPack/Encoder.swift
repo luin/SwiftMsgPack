@@ -32,6 +32,14 @@
 
 import Foundation
 
+extension NSNumber {
+    fileprivate var isBool: Bool {
+          let boolID = CFBooleanGetTypeID() // the type ID of CFBoolean
+          let numID = CFGetTypeID(self) // the type ID of num
+          return numID == boolID
+    }
+}
+
 
 // MARK: - Pack
 
@@ -75,6 +83,12 @@ public extension Data {
 		if let value_str = obj as? String {
 			try self.pack(string: value_str)
 		}
+    
+    // BOOLEAN VALUES
+    else if let value_nsnumber = obj as? NSNumber, value_nsnumber.isBool, let value_bool = value_nsnumber as? Bool {
+      try self.pack(boolean: value_bool)
+    }
+
 		
 		// UNSIGNED INT
 		else if let value_u8 = obj as? UInt8 { // 8 BIT
