@@ -63,6 +63,11 @@ class SwiftMsgPackTests_Dictionary: XCTestCase {
 		let (dict,bytes) = generateTestDictionary(Int(len))
 		performTestOnDictionary(name: "Test Small Dictionary", value: dict, expected: bytes)
 	}
+  
+  func testEmptyDictionary() {
+    let data = Data(base64Encoded: "gAJ9cQAoVQRsaW9ucQFVBnllbGxvd3ECVQVraXR0eXEDVQNyZWRxBHUu")!
+    XCTAssertThrowsError(try data.unpack())
+  }
 	
 	// MARK: - Helper Functions
 

@@ -49,6 +49,10 @@ private struct StreamReader {
 		self.data = data
 		self.index = 0
 	}
+  
+  var isDrained: Bool {
+    return index >= data.count
+  }
 	
 	/// Read the next data type header of the structure (8 bit) and move the index by 1 position
 	///
@@ -149,7 +153,12 @@ public extension Data {
 		// and several help functions to read data
 		var reader = StreamReader(self)
 		// try to unpack data
-		return try self.unpack(stream: &reader)
+		let unpacked = try self.unpack(stream: &reader)
+    
+    if !reader.isDrained {
+      throw MsgPackError.unexpectedData
+    }
+    return unpacked
 	}
 	
 	// MARK - Unpack Internal Functions 
